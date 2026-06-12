@@ -1,0 +1,14 @@
+# One path pattern per line. Empty lines and comments are ignored.
+# These are generic examples. Projects may add stricter private rules.
+
+.env
+.env.*
+*.key
+*.pem
+*.p12
+*.pfx
+storage/*.sqlite
+database/*.sqlite
+vendor/
+node_modules/
+.ai/runs/
