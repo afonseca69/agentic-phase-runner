@@ -2,9 +2,9 @@
 
 A generic, provider-agnostic phase runner for executing software projects with AI agents.
 
-The goal is simple: turn project documentation into a controlled execution loop with phases, safety gates, memory summaries, token accounting, and pluggable AI agents such as Hermes, Codex, Claude, MiniMax, Gemini, or any custom executor.
+The goal is simple: turn project documentation into a controlled execution loop with phases, guardrails, memory summaries, token accounting, and pluggable AI agents such as Hermes, Codex, Claude, MiniMax, Gemini, or any custom executor.
 
-This repository is intentionally generic and public-safe. It should not contain private roadmaps, customer data, internal company prompts, API keys, logs, `.env` files, or real project memory exports.
+This repository is intentionally generic and public-safe. It should not contain private roadmaps, customer data, internal company prompts, runtime logs, local configuration files, or real project memory exports.
 
 ## Core idea
 
@@ -17,7 +17,7 @@ ralph.sh deterministic runner
   ↓
 manager / executor / reviewer agents
   ↓
-validation, logs, summaries, and gates
+validation, logs, summaries, guardrails, and gates
 ```
 
 The runner does not replace human judgment. It creates a repeatable loop for AI-assisted project execution.
@@ -47,8 +47,17 @@ Custom  = any other CLI/API adapter
 │   │   ├── safety-rules.md
 │   │   ├── memory-policy.md
 │   │   └── token-policy.md
+│   ├── guardrails/
+│   │   ├── command-denylist.txt
+│   │   ├── protected-paths.txt
+│   │   ├── approval-gates.yaml
+│   │   ├── phase-close-checklist.md
+│   │   └── review-checklist.md
 │   └── hooks/
 │       ├── guard-command.sh
+│       ├── guard-files.sh
+│       ├── check-phase-gates.sh
+│       ├── check-phase-close.sh
 │       ├── log-event.sh
 │       ├── log-tokens.sh
 │       └── notify.sh
@@ -62,6 +71,7 @@ A real project usually keeps only project-specific files:
 ```text
 project/
 ├── .ai/project-blueprint.yaml
+├── .ai/guardrails/
 ├── docs/project-description.md
 ├── docs/project-phases.md
 ├── AGENTS.md
@@ -81,6 +91,27 @@ project/
 ```
 
 The default executor is `dry-run`, which writes prompts and logs without calling any AI provider.
+
+## Guardrails
+
+The public guardrails layer is generic and reusable:
+
+- `command-denylist.txt` lists command patterns that should stop execution.
+- `protected-paths.txt` lists file path patterns that require review.
+- `approval-gates.yaml` defines generic approval gates.
+- `phase-close-checklist.md` defines minimum checks before closing a phase.
+- `review-checklist.md` defines reviewer expectations.
+
+Hooks can be called directly:
+
+```bash
+.ai/hooks/guard-command.sh "git status --short"
+.ai/hooks/guard-files.sh
+.ai/hooks/check-phase-gates.sh F01
+.ai/hooks/check-phase-close.sh F01
+```
+
+Project-specific guardrails should be provided by a private config repository or by the target project.
 
 ## Quick validation
 
@@ -155,7 +186,7 @@ Keep this public repository generic. Put private company rules, real project blu
 The runner and templates are designed to be safe by default:
 
 - default executor is `dry-run`;
-- secrets and `.env` files are forbidden;
+- protected local files are listed in guardrails;
 - destructive commands are blocked by policy;
 - production deploys require human approval;
 - real external API calls require explicit permission;
