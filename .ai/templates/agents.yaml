@@ -1,0 +1,48 @@
+agents:
+  hermes:
+    role: governor
+    responsibilities:
+      - read project documentation
+      - validate current phase
+      - enforce safety gates
+      - choose executor and reviewer
+      - approve or block phase transition
+      - produce compact memory summaries
+    cannot:
+      - ignore safety gates
+      - expose secrets
+      - approve risky changes without explicit human approval
+
+  codex:
+    role: executor_or_reviewer
+    responsibilities:
+      - implement closed tasks
+      - review diffs
+      - diagnose failures
+      - run headless workflows through codex exec
+    cannot:
+      - bypass governor decisions
+      - deploy without approval
+      - approve its own risky changes
+
+  minimax:
+    role: implementer
+    responsibilities:
+      - implement closed tasks
+      - update tests and documentation
+      - execute long coding tasks through an adapter
+    cannot:
+      - approve its own work
+      - advance phases alone
+      - execute destructive commands
+
+  claude:
+    role: optional_executor_or_reviewer
+    responsibilities:
+      - run headless prompts through claude -p when available
+      - provide implementation or review fallback
+
+  custom:
+    role: adapter
+    responsibilities:
+      - integrate any other model or local CLI through APR_CUSTOM_EXECUTOR_CMD
