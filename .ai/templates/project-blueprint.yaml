@@ -1,0 +1,77 @@
+project:
+  name: example-project
+  type: generic
+  language: en
+  stack:
+    backend: none
+    frontend: none
+    database: none
+
+execution:
+  runner: ralph
+  manager: hermes
+  default_executor: dry-run
+  default_reviewer: none
+  memory: none
+
+mcp:
+  required: []
+
+safety:
+  require_human_approval:
+    - destructive_command
+    - production_deploy
+    - external_api_real_call
+    - database_schema_change
+    - payment_integration
+    - authentication_architecture
+
+  forbidden_commands:
+    - migrate:fresh
+    - migrate:refresh
+    - db:wipe
+    - rollback
+    - reset
+    - docker compose down -v
+    - sail down -v
+    - git push --force
+    - git clean -fdx
+    - rm -rf
+
+memory:
+  save_permanent:
+    - completed_phase
+    - decisions
+    - pending_items
+    - risks
+    - next_phase
+
+  never_save:
+    - secrets
+    - full_logs
+    - full_diffs
+    - .env
+    - tokens
+
+phases:
+  - id: F01
+    name: Discovery
+    goal: Define scope, constraints, risks, and acceptance criteria.
+    executor: hermes
+    reviewer: none
+    auto_continue: false
+    acceptance:
+      - Project description exists.
+      - Initial phase plan exists.
+      - Safety gates are reviewed.
+
+  - id: F02
+    name: First implementation slice
+    goal: Implement a small, testable first slice.
+    executor: dry-run
+    reviewer: none
+    auto_continue: false
+    acceptance:
+      - A small artifact exists.
+      - Validation steps are documented.
+      - A phase summary exists.
