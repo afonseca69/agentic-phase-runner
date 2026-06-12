@@ -1,0 +1,11 @@
+# One pattern per line. Empty lines and comments are ignored.
+# These are generic examples. Projects may add stricter private rules.
+
+migrate:fresh
+migrate:refresh
+db:wipe
+sail down -v
+docker compose down -v
+git push --force
+git clean -fdx
+rm -rf /
