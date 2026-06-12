@@ -192,6 +192,16 @@ The runner and templates are designed to be safe by default:
 - real external API calls require explicit permission;
 - database schema changes should be gated.
 
+## Agradecimentos
+
+Este projeto nasceu inspirado pelo trabalho e pelas ideias compartilhadas pelo clã **[Beer and Code](https://beerandcode.com.br/)**.
+
+A estrutura de execução por fases, o uso de um runner para conduzir o ciclo de desenvolvimento agentic e a combinação entre documentação, automação, guardrails e agentes de IA foram fortemente inspirados nos experimentos e repositórios públicos do Beer and Code.
+
+O objetivo deste repositório não é copiar uma implementação específica, mas reconhecer a origem da ideia que motivou esta iniciativa e evoluí-la em uma direção própria: um runner genérico, reutilizável e adaptável para diferentes projetos, agentes e fluxos de trabalho.
+
+Obrigado ao clã Beer and Code por compartilhar conhecimento, provocar novas ideias e mostrar caminhos práticos para transformar desenvolvimento assistido por IA em um processo mais organizado, rastreável e seguro.
+
 ## Status
 
 This is an early public template. The first goal is to validate the structure and execution model before adding provider-specific adapters.
